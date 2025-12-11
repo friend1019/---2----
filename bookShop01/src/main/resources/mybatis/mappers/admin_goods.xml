@@ -72,7 +72,7 @@
 	</resultMap>
 	<insert id="insertNewGoods" parameterType="java.util.Map"   >
 		<selectKey resultType="String" keyProperty="goods_id" order="BEFORE">
-	    	select seq_goods_id.nextval from dual
+	    	select next value for seq_goods_id
 	    </selectKey>
 	    
 	    <![CDATA[
@@ -124,7 +124,7 @@
 	</insert> 
 		<insert id="insertGoodsImageFile" parameterType="imageFileVO"   >
 		<selectKey resultType="int" keyProperty="image_id" order="BEFORE">
-	    	select seq_image_id.nextval from dual
+	    	select next value for seq_image_id
 	    </selectKey>
 	    <![CDATA[
 		   insert into t_goods_detail_image (image_id,
@@ -197,7 +197,7 @@
 	    <![CDATA[
 		     select g.*,to_char(g.goods_published_date,'YYYY-MM-DD') as goods_published_date, d.fileName from t_shopping_goods g, t_goods_detail_image d
 	        where g.goods_id=d.goods_id
-	        and d.filetype='main_image'
+	        and d.fileType='main_image'
 	        and g.goods_id=#{goods_id}
 	        order by g.goods_id
     	]]>

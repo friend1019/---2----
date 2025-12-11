@@ -44,7 +44,7 @@
           from(
 			select g.*,d.fileName from t_shopping_goods g, t_goods_detail_image d
         	where g.goods_id=d.goods_id 
-        	and d.filetype='main_image'
+        	and d.fileType='main_image'
         	and goods_status=#{goodsStatus}
             order by g.goods_creDate desc)  t
 	             where   rowNum <16
@@ -55,7 +55,7 @@
 	    <![CDATA[
 		     select g.*,d.fileName from t_shopping_goods g, t_goods_detail_image d
 	        where g.goods_id=d.goods_id
-	        and d.filetype='main_image'
+	        and d.fileType='main_image'
 	        and g.goods_id=#{goods_id}
 	        order by g.goods_id
     	]]>
@@ -72,7 +72,7 @@
      <![CDATA[
 				select g.*,d.fileName from t_shopping_goods g, t_goods_detail_image d
 		    where g.goods_id=d.goods_id
-		    and d.filetype='main_image'
+		    and d.fileType='main_image'
 		    and g.goods_title like '%'|| #{searchWord} || '%'
 		    order by g.goods_creDate desc
 		]]>

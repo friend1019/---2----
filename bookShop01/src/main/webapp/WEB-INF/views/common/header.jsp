@@ -80,7 +80,7 @@
 			   <li><a href="${contextPath}/member/logout.do">로그아웃</a></li>
 			   <li><a href="${contextPath}/mypage/myPageMain.do">마이페이지</a></li>
 			   <li><a href="${contextPath}/cart/myCartList.do">장바구니</a></li>
-			   <li><a href="#">주문배송</a></li>
+			   <li><a href="${contextPath}/mypage/listMyOrderHistory.do">주문배송</a></li>
 			 </c:when>
 			 <c:otherwise>
 			   <li><a href="${contextPath}/member/loginForm.do">로그인</a></li>

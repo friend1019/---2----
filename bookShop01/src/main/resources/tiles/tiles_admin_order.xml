@@ -9,7 +9,15 @@
        <put-attribute name="title" value="주문 관리 페이지" />
        <put-attribute name="body" value="/WEB-INF/views/admin/order/adminOrderMain.jsp" />
     </definition>
+    <definition name="admin/order/adminOrderMain" extends="baseLayout">
+       <put-attribute name="title" value="주문 관리 페이지" />
+       <put-attribute name="body" value="/WEB-INF/views/admin/order/adminOrderMain.jsp" />
+    </definition>
     <definition name="/admin/order/orderDetail" extends="baseLayout">
+       <put-attribute name="title" value="주문 관리 페이지" />
+       <put-attribute name="body" value="/WEB-INF/views/admin/order/adminOrderDetail.jsp" />
+    </definition>    
+    <definition name="admin/order/orderDetail" extends="baseLayout">
        <put-attribute name="title" value="주문 관리 페이지" />
        <put-attribute name="body" value="/WEB-INF/views/admin/order/adminOrderDetail.jsp" />
     </definition>    

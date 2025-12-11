@@ -58,6 +58,9 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 		 }
 		
 		String viewName=(String)request.getAttribute("viewName");
+		if(viewName==null) {
+			viewName="order/orderGoodsForm";
+		}
 		ModelAndView mav = new ModelAndView(viewName);
 		
 		List myOrderList=new ArrayList<OrderVO>();
@@ -74,6 +77,9 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	public ModelAndView orderAllCartGoods( @RequestParam("cart_goods_qty")  String[] cart_goods_qty,
 			                 HttpServletRequest request, HttpServletResponse response)  throws Exception{
 		String viewName=(String)request.getAttribute("viewName");
+		if(viewName==null) {
+			viewName="order/orderGoodsForm";
+		}
 		ModelAndView mav = new ModelAndView(viewName);
 		HttpSession session=request.getSession();
 		Map cartMap=(Map)session.getAttribute("cartMap");
@@ -111,14 +117,21 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	public ModelAndView payToOrderGoods(@RequestParam Map<String, String> receiverMap,
 			                       HttpServletRequest request, HttpServletResponse response)  throws Exception{
 		String viewName=(String)request.getAttribute("viewName");
+		if(viewName==null) {
+			viewName="order/payToOrderGoods";
+		}
 		ModelAndView mav = new ModelAndView(viewName);
 		
 		HttpSession session=request.getSession();
 		MemberVO memberVO=(MemberVO)session.getAttribute("orderer");
+		List<OrderVO> myOrderList=(List<OrderVO>)session.getAttribute("myOrderList");
+		if(memberVO==null || myOrderList==null || myOrderList.isEmpty()) {
+			// 세션이 끊겼거나 주문 정보가 없으면 장바구니로 되돌린다.
+			return new ModelAndView("redirect:/cart/myCartList.do");
+		}
 		String member_id=memberVO.getMember_id();
 		String orderer_name=memberVO.getMember_name();
 		String orderer_hp = memberVO.getHp1()+"-"+memberVO.getHp2()+"-"+memberVO.getHp3();
-		List<OrderVO> myOrderList=(List<OrderVO>)session.getAttribute("myOrderList");
 		
 		for(int i=0; i<myOrderList.size();i++){
 			OrderVO orderVO=(OrderVO)myOrderList.get(i);

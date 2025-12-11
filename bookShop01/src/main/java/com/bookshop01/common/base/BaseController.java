@@ -22,12 +22,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 import com.bookshop01.common.util.PathUtils;
 import com.bookshop01.goods.vo.ImageFileVO;
 
-public abstract class BaseController  {
+public class BaseController  {
 	private static final Path IMAGE_REPO_PATH = PathUtils.imageRepoPath();
 	
 	protected List<ImageFileVO> upload(MultipartHttpServletRequest multipartRequest) throws Exception{
