@@ -2,40 +2,42 @@ package com.bookshop01.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
-import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
-import org.springframework.web.servlet.view.tiles3.TilesView;
-
-import com.bookshop01.common.interceptor.ViewNameInterceptor;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
+    // Thymeleaf 설정 (Tiles 다음 우선순위)
     @Bean
-    public TilesConfigurer tilesConfigurer() {
-        TilesConfigurer tilesConfigurer = new TilesConfigurer();
-        // Tiles definitions packaged under resources/tiles (filenames are tiles_*.xml)
-        tilesConfigurer.setDefinitions("classpath*:tiles/tiles_*.xml");
-        tilesConfigurer.setCheckRefresh(true);
-        return tilesConfigurer;
-    }
-
-    @Bean
-    public TilesViewResolver viewResolver() {
-        TilesViewResolver resolver = new TilesViewResolver();
-        resolver.setViewClass(TilesView.class);
-        // Tiles로 먼저 해석하도록 우선순위를 높게 설정
-        resolver.setOrder(0);
+    public SpringResourceTemplateResolver thymeleafTemplateResolver() {
+        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
+        resolver.setPrefix("classpath:/templates/");
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode("HTML");
+        resolver.setCharacterEncoding("UTF-8");
+        resolver.setCacheable(false);
         return resolver;
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new ViewNameInterceptor())
-                .addPathPatterns("/*/*.do", "/*/*/*.do");
+    @Bean
+    public SpringTemplateEngine thymeleafTemplateEngine() {
+        SpringTemplateEngine engine = new SpringTemplateEngine();
+        engine.setTemplateResolver(thymeleafTemplateResolver());
+        engine.setEnableSpringELCompiler(true);
+        return engine;
+    }
+
+    @Bean
+    public ThymeleafViewResolver thymeleafViewResolver() {
+        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+        resolver.setTemplateEngine(thymeleafTemplateEngine());
+        resolver.setCharacterEncoding("UTF-8");
+        resolver.setOrder(0);
+        return resolver;
     }
 
     @Override

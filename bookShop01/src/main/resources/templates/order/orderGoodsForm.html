@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body" th:with="orderList=${myOrderList}, orderer=${orderer}">
+  <h3>주문 상품</h3>
+  <table class="list_view">
+    <tbody align="center">
+      <tr style="background:#33ff00">
+        <td class="fixed">구분</td>
+        <td colspan="2" class="fixed">상품명</td>
+        <td>판매가</td>
+        <td>수량</td>
+        <td>합계</td>
+      </tr>
+      <tr th:each="item, stat : ${orderList}">
+        <td>상품</td>
+        <td class="goods_image">
+          <img width="75" th:src="@{|/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}|}">
+        </td>
+        <td><h2 th:text="${item.goods_title}">상품명</h2></td>
+        <td th:text="${#numbers.formatInteger(item.goods_sales_price,0,'COMMA') + '원'}">0원</td>
+        <td th:text="${item.order_goods_qty}">1</td>
+        <td th:text="${#numbers.formatInteger(item.goods_sales_price * item.order_goods_qty,0,'COMMA') + '원'}">0원</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 style="margin-top:20px;">주문자 정보</h3>
+  <div>
+    <p th:text="${orderer != null ? orderer.member_name : ''}">주문자명</p>
+    <p th:text="${orderer != null ? orderer.hp1 + '-' + orderer.hp2 + '-' + orderer.hp3 : ''}">연락처</p>
+  </div>
+
+  <h3 style="margin-top:20px;">배송지 정보</h3>
+  <form th:action="@{/order/payToOrderGoods.do}" method="post">
+    <input type="hidden" name="delivery_address" th:value="${orderer != null ? orderer.roadAddress + ' ' + orderer.namujiAddress : ''}">
+    <table>
+      <tbody>
+        <tr>
+          <td>수령인</td>
+          <td><input type="text" name="receiver_name" th:value="${orderer != null ? orderer.member_name : ''}"></td>
+        </tr>
+        <tr>
+          <td>휴대폰</td>
+          <td>
+            <input type="text" name="receiver_hp1" size="3" th:value="${orderer != null ? orderer.hp1 : ''}"> -
+            <input type="text" name="receiver_hp2" size="4" th:value="${orderer != null ? orderer.hp2 : ''}"> -
+            <input type="text" name="receiver_hp3" size="4" th:value="${orderer != null ? orderer.hp3 : ''}">
+          </td>
+        </tr>
+        <tr>
+          <td>주소</td>
+          <td>
+            <input type="text" name="receiver_tel1" size="3" th:value="${orderer != null ? orderer.tel1 : ''}"> -
+            <input type="text" name="receiver_tel2" size="4" th:value="${orderer != null ? orderer.tel2 : ''}"> -
+            <input type="text" name="receiver_tel3" size="4" th:value="${orderer != null ? orderer.tel3 : ''}">
+            <br>
+            <input type="text" name="delivery_message" placeholder="배송 메모">
+          </td>
+        </tr>
+        <tr>
+          <td>결제수단</td>
+          <td>
+            <select name="pay_method">
+              <option value="card">신용카드</option>
+              <option value="phone">휴대폰결제</option>
+            </select>
+            <br>
+            카드사: <input type="text" name="card_com_name" size="10">
+            할부: <input type="text" name="card_pay_month" size="5">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:20px;">
+      <button type="submit" style="padding:10px 20px;">최종 결제하기</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>

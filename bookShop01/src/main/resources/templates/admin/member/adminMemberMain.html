@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body" th:with="list=${member_list}">
+  <h3>회원 조회</h3>
+  <p>조회 기간: <span th:text="${beginYear}"></span>-<span th:text="${beginMonth}"></span>-<span th:text="${beginDay}"></span>
+    ~ <span th:text="${endYear}"></span>-<span th:text="${endMonth}"></span>-<span th:text="${endDay}"></span></p>
+
+  <table class="list_view">
+    <thead>
+    <tr style="background:#33ff00">
+      <th>ID</th>
+      <th>이름</th>
+      <th>등급</th>
+      <th>이메일</th>
+      <th>가입일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(list)}">
+      <td colspan="5">회원이 없습니다.</td>
+    </tr>
+    <tr th:each="m : ${list}">
+      <td><a th:href="@{|/admin/member/memberDetail.do?member_id=${m.member_id}|}" th:text="${m.member_id}">id</a></td>
+      <td th:text="${m.member_name}">이름</td>
+      <td th:text="${m.member_gender}">등급</td>
+      <td th:text="${m.email1 + '@' + m.email2}">email</td>
+      <td th:text="${m.joinDate}">날짜</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

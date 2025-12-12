@@ -57,11 +57,9 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 			 }
 		 }
 		
-		String viewName=(String)request.getAttribute("viewName");
-		if(viewName==null) {
-			viewName="order/orderGoodsForm";
-		}
-		ModelAndView mav = new ModelAndView(viewName);
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "주문/결제");
+		mav.addObject("body", "order/orderGoodsForm :: body");
 		
 		List myOrderList=new ArrayList<OrderVO>();
 		myOrderList.add(orderVO);
@@ -70,17 +68,17 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 		
 		session.setAttribute("myOrderList", myOrderList);
 		session.setAttribute("orderer", memberInfo);
+		mav.addObject("myOrderList", myOrderList);
+		mav.addObject("orderer", memberInfo);
 		return mav;
 	}
 	
 	@RequestMapping(value="/orderAllCartGoods.do" ,method = RequestMethod.POST)
 	public ModelAndView orderAllCartGoods( @RequestParam("cart_goods_qty")  String[] cart_goods_qty,
 			                 HttpServletRequest request, HttpServletResponse response)  throws Exception{
-		String viewName=(String)request.getAttribute("viewName");
-		if(viewName==null) {
-			viewName="order/orderGoodsForm";
-		}
-		ModelAndView mav = new ModelAndView(viewName);
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "주문/결제");
+		mav.addObject("body", "order/orderGoodsForm :: body");
 		HttpSession session=request.getSession();
 		Map cartMap=(Map)session.getAttribute("cartMap");
 		List myOrderList=new ArrayList<OrderVO>();
@@ -110,17 +108,17 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 		}
 		session.setAttribute("myOrderList", myOrderList);
 		session.setAttribute("orderer", memberVO);
+		mav.addObject("myOrderList", myOrderList);
+		mav.addObject("orderer", memberVO);
 		return mav;
 	}	
 	
 	@RequestMapping(value="/payToOrderGoods.do" ,method = RequestMethod.POST)
 	public ModelAndView payToOrderGoods(@RequestParam Map<String, String> receiverMap,
 			                       HttpServletRequest request, HttpServletResponse response)  throws Exception{
-		String viewName=(String)request.getAttribute("viewName");
-		if(viewName==null) {
-			viewName="order/payToOrderGoods";
-		}
-		ModelAndView mav = new ModelAndView(viewName);
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "주문 완료");
+		mav.addObject("body", "order/orderResult :: body");
 		
 		HttpSession session=request.getSession();
 		MemberVO memberVO=(MemberVO)session.getAttribute("orderer");
@@ -161,6 +159,7 @@ public class OrderControllerImpl extends BaseController implements OrderControll
 	    orderService.addNewOrder(myOrderList);
 		mav.addObject("myOrderInfo",receiverMap);//OrderVO·Î ÁÖ¹®°á°ú ÆäÀÌÁö¿¡  ÁÖ¹®ÀÚ Á¤º¸¸¦ Ç¥½ÃÇÑ´Ù.
 		mav.addObject("myOrderList", myOrderList);
+		mav.addObject("orderer", memberVO);
 		return mav;
 	}
 	

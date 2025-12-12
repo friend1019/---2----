@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body">
+  <h3>주문이 완료되었습니다.</h3>
+  <p>감사합니다. 주문 내역은 마이페이지 > 주문배송에서 확인하실 수 있습니다.</p>
+
+  <h4>주문 상품</h4>
+  <table class="list_view">
+    <tbody align="center">
+      <tr style="background:#33ff00">
+        <td class="fixed">상품명</td>
+        <td>판매가</td>
+        <td>수량</td>
+        <td>합계</td>
+      </tr>
+      <tr th:each="item : ${myOrderList}">
+        <td th:text="${item.goods_title}">상품명</td>
+        <td th:text="${#numbers.formatInteger(item.goods_sales_price,0,'COMMA') + '원'}">0원</td>
+        <td th:text="${item.order_goods_qty}">1</td>
+        <td th:text="${#numbers.formatInteger(item.goods_sales_price * item.order_goods_qty,0,'COMMA') + '원'}">0원</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4 style="margin-top:20px;">배송지 정보</h4>
+  <div th:if="${myOrderInfo != null}">
+    <p th:text="'수령인: ' + ${myOrderInfo.receiver_name}">수령인</p>
+    <p th:text="'휴대폰: ' + ${myOrderInfo.receiver_hp1} + '-' + ${myOrderInfo.receiver_hp2} + '-' + ${myOrderInfo.receiver_hp3}">휴대폰</p>
+    <p th:text="'연락처: ' + ${myOrderInfo.receiver_tel1} + '-' + ${myOrderInfo.receiver_tel2} + '-' + ${myOrderInfo.receiver_tel3}">연락처</p>
+    <p th:text="'주소: ' + ${myOrderInfo.delivery_address}">주소</p>
+    <p th:text="'메시지: ' + ${myOrderInfo.delivery_message}">메시지</p>
+    <p th:text="'결제수단: ' + ${myOrderInfo.pay_method}">결제수단</p>
+  </div>
+</div>
+</body>
+</html>

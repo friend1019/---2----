@@ -39,11 +39,22 @@ public class AdminGoodsControllerImpl extends BaseController  implements AdminGo
 	@Autowired
 	private AdminGoodsService adminGoodsService;
 	
+	@RequestMapping(value="/addNewGoodsForm.do" ,method=RequestMethod.GET)
+	public ModelAndView addNewGoodsForm(HttpServletRequest request, HttpServletResponse response)  throws Exception {
+		HttpSession session=request.getSession();
+		session.setAttribute("side_menu", "admin_mode");
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "관리자 상품 등록");
+		mav.addObject("body", "admin/goods/addNewGoodsForm :: body");
+		return mav;
+	}
+	
 	@RequestMapping(value="/adminGoodsMain.do" ,method={RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView adminGoodsMain(@RequestParam Map<String, String> dateMap,
 			                           HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav = new ModelAndView(viewName);
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "관리자 상품 조회");
+		mav.addObject("body", "admin/goods/adminGoodsMain :: body");
 		HttpSession session=request.getSession();
 		session=request.getSession();
 		session.setAttribute("side_menu", "admin_mode"); //마이페이지 사이드 메뉴로 설정한다.
@@ -142,9 +153,11 @@ public class AdminGoodsControllerImpl extends BaseController  implements AdminGo
 	@RequestMapping(value="/modifyGoodsForm.do" ,method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView modifyGoodsForm(@RequestParam("goods_id") int goods_id,
 			                            HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav = new ModelAndView(viewName);
-		
+		HttpSession session=request.getSession();
+		session.setAttribute("side_menu", "admin_mode");
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "상품 수정");
+		mav.addObject("body", "admin/goods/modifyGoodsForm :: body");
 		Map goodsMap=adminGoodsService.goodsDetail(goods_id);
 		mav.addObject("goodsMap",goodsMap);
 		
@@ -168,6 +181,18 @@ public class AdminGoodsControllerImpl extends BaseController  implements AdminGo
 		message  = "mod_success";
 		resEntity =new ResponseEntity(message, responseHeaders, HttpStatus.OK);
 		return resEntity;
+	}
+	
+	@RequestMapping(value="/addNewGoodsImageForm.do" ,method=RequestMethod.GET)
+	public ModelAndView addNewGoodsImageForm(@RequestParam("goods_id") int goodsId,
+			 HttpServletRequest request, HttpServletResponse response) throws Exception {
+		HttpSession session=request.getSession();
+		session.setAttribute("side_menu", "admin_mode");
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "상품 이미지 추가");
+		mav.addObject("body", "admin/goods/addNewGoodsImageForm :: body");
+		mav.addObject("goods_id", goodsId);
+		return mav;
 	}
 	
 

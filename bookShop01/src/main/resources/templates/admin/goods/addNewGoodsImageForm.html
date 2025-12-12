@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body">
+  <h3>추가 상품 이미지 등록</h3>
+  <form th:action="@{/admin/goods/addNewGoodsImage.do}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="goods_id" th:value="${goods_id}">
+    <table>
+      <tr>
+        <td>상세 이미지</td>
+        <td><input type="file" name="detail_image1"></td>
+      </tr>
+      <tr>
+        <td>상세 이미지</td>
+        <td><input type="file" name="detail_image2"></td>
+      </tr>
+    </table>
+    <div style="margin-top:12px;">
+      <button type="submit">등록</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>

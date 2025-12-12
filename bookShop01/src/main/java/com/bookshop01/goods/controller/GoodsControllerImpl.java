@@ -31,10 +31,11 @@ public class GoodsControllerImpl extends BaseController   implements GoodsContro
 	@RequestMapping(value="/goodsDetail.do" ,method = RequestMethod.GET)
 	public ModelAndView goodsDetail(@RequestParam("goods_id") String goods_id,
 			                       HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String viewName=(String)request.getAttribute("viewName");
 		HttpSession session=request.getSession();
 		Map goodsMap=goodsService.goodsDetail(goods_id);
-		ModelAndView mav = new ModelAndView(viewName);
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "상품 상세");
+		mav.addObject("body", "goods/goodsDetail :: body");
 		mav.addObject("goodsMap", goodsMap);
 		GoodsVO goodsVO=(GoodsVO)goodsMap.get("goodsVO");
 		addGoodsInQuick(goods_id,goodsVO,session);
@@ -65,19 +66,22 @@ public class GoodsControllerImpl extends BaseController   implements GoodsContro
 	@RequestMapping(value="/searchGoods.do" ,method = RequestMethod.GET)
 	public ModelAndView searchGoods(@RequestParam("searchWord") String searchWord,
 			                       HttpServletRequest request, HttpServletResponse response) throws Exception{
-		String viewName=(String)request.getAttribute("viewName");
 		List<GoodsVO> goodsList=goodsService.searchGoods(searchWord);
-		ModelAndView mav = new ModelAndView(viewName);
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "상품 검색");
+		mav.addObject("body", "goods/searchGoods :: body");
 		mav.addObject("goodsList", goodsList);
+		mav.addObject("searchWord", searchWord);
 		return mav;
 		
 	}
 	
 	@RequestMapping(value="/goodsList.do" ,method = RequestMethod.GET)
 	public ModelAndView goodsList(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		String viewName=(String)request.getAttribute("viewName");
 		Map<String,List<GoodsVO>> goodsMap=goodsService.listGoods();
-		ModelAndView mav = new ModelAndView(viewName);
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "상품 목록");
+		mav.addObject("body", "goods/goodsList :: body");
 		mav.addObject("goodsMap", goodsMap);
 		return mav;
 	}

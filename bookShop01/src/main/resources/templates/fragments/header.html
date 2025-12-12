@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div id="logo">
+  <a th:href="@{/main/main.do}">
+    <img width="176" height="80" alt="booktopia" th:src="@{/resources/image/Booktopia_Logo.jpg}">
+  </a>
+</div>
+<div id="head_link">
+  <ul>
+    <li th:if="${session.isLogOn}"><a th:href="@{/member/logout.do}">로그아웃</a></li>
+    <li th:if="${session.isLogOn}"><a th:href="@{/mypage/myPageMain.do}">마이페이지</a></li>
+    <li th:if="${session.isLogOn}"><a th:href="@{/cart/myCartList.do}">장바구니</a></li>
+    <li th:if="${session.isLogOn}"><a th:href="@{/mypage/listMyOrderHistory.do}">주문배송</a></li>
+
+    <li th:if="${session.isLogOn} == false or session.isLogOn == null"><a th:href="@{/member/loginForm.do}">로그인</a></li>
+    <li th:if="${session.isLogOn} == false or session.isLogOn == null"><a th:href="@{/member/memberForm.do}">회원가입</a></li>
+
+    <li><a href="#">고객센터</a></li>
+    <li th:if="${session.isLogOn and session.memberInfo != null and session.memberInfo.member_id == 'admin'}" class="no_line">
+      <a th:href="@{/admin/goods/adminGoodsMain.do}">관리자</a>
+    </li>
+  </ul>
+</div>
+<br>
+<div id="search">
+  <form name="frmSearch" th:action="@{/goods/searchGoods.do}" method="get">
+    <input name="searchWord" class="main_input" type="text" onkeyup="keywordSearch()">
+    <input type="submit" name="search" class="btn1" value="검 색">
+  </form>
+</div>
+<div id="suggest">
+  <div id="suggestList"></div>
+</div>
+</body>
+</html>

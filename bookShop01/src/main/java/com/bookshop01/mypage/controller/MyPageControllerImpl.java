@@ -41,8 +41,9 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		session=request.getSession();
 		session.setAttribute("side_menu", "my_page"); //마이페이지 사이드 메뉴로 설정한다.
 		
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav = new ModelAndView(viewName);
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "마이페이지");
+		mav.addObject("body", "mypage/myPageMain :: body");
 		memberVO=(MemberVO)session.getAttribute("memberInfo");
 		String member_id=memberVO.getMember_id();
 		
@@ -50,6 +51,7 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 		
 		mav.addObject("message", message);
 		mav.addObject("myOrderList", myOrderList);
+		mav.addObject("memberInfo", memberVO);
 
 		return mav;
 	}
@@ -57,8 +59,9 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	@Override
 	@RequestMapping(value="/myOrderDetail.do" ,method = RequestMethod.GET)
 	public ModelAndView myOrderDetail(@RequestParam("order_id")  String order_id,HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav = new ModelAndView(viewName);
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "주문 상세");
+		mav.addObject("body", "mypage/myOrderDetail :: body");
 		HttpSession session=request.getSession();
 		MemberVO orderer=(MemberVO)session.getAttribute("memberInfo");
 		
@@ -72,8 +75,9 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	@RequestMapping(value="/listMyOrderHistory.do" ,method = RequestMethod.GET)
 	public ModelAndView listMyOrderHistory(@RequestParam Map<String, String> dateMap,
 			                               HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav = new ModelAndView(viewName);
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "주문/배송 조회");
+		mav.addObject("body", "mypage/listMyOrderHistory :: body");
 		HttpSession session=request.getSession();
 		memberVO=(MemberVO)session.getAttribute("memberInfo");
 		String  member_id=memberVO.getMember_id();
@@ -115,8 +119,11 @@ public class MyPageControllerImpl extends BaseController  implements MyPageContr
 	@Override
 	@RequestMapping(value="/myDetailInfo.do" ,method = RequestMethod.GET)
 	public ModelAndView myDetailInfo(HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav = new ModelAndView(viewName);
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "내 정보");
+		mav.addObject("body", "mypage/myDetailInfo :: body");
+		HttpSession session=request.getSession();
+		mav.addObject("memberInfo", (MemberVO)session.getAttribute("memberInfo"));
 		return mav;
 	}	
 	

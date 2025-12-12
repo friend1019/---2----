@@ -29,8 +29,11 @@ public class AdminMemberControllerImpl extends BaseController  implements AdminM
 	@RequestMapping(value="/adminMemberMain.do" ,method={RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView adminGoodsMain(@RequestParam Map<String, String> dateMap,
 			                           HttpServletRequest request, HttpServletResponse response)  throws Exception{
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav = new ModelAndView(viewName);
+		HttpSession session=request.getSession();
+		session.setAttribute("side_menu", "admin_mode");
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "관리자 회원 조회");
+		mav.addObject("body", "admin/member/adminMemberMain :: body");
 
 		String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
 		String section = dateMap.get("section");
@@ -74,8 +77,9 @@ public class AdminMemberControllerImpl extends BaseController  implements AdminM
 	}
 	@RequestMapping(value="/memberDetail.do" ,method={RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView memberDetail(HttpServletRequest request, HttpServletResponse response)  throws Exception{
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav = new ModelAndView(viewName);
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "회원 상세");
+		mav.addObject("body", "admin/member/memberDetail :: body");
 		String member_id=request.getParameter("member_id");
 		MemberVO member_info=adminMemberService.memberDetail(member_id);
 		mav.addObject("member_info",member_info);

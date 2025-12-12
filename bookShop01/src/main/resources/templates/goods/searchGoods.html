@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body">
+  <h3 th:text="'검색 결과: ' + ${searchWord}">검색 결과</h3>
+  <div th:if="${#lists.isEmpty(goodsList)}">검색된 상품이 없습니다.</div>
+  <table id="list_view" th:if="${!#lists.isEmpty(goodsList)}">
+    <tbody>
+    <tr th:each="item : ${goodsList}">
+      <td class="goods_image">
+        <a th:href="@{|/goods/goodsDetail.do?goods_id=${item.goods_id}|}">
+          <img width="75" th:src="@{|/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}|}">
+        </a>
+      </td>
+      <td class="goods_description">
+        <h2>
+          <a th:href="@{|/goods/goodsDetail.do?goods_id=${item.goods_id}|}" th:text="${item.goods_title}">제목</a>
+        </h2>
+        <div class="writer_press" th:text="${item.goods_writer} + ' | ' + ${item.goods_publisher}"></div>
+      </td>
+      <td class="price">
+        <span th:text="${#numbers.formatInteger(item.goods_price,0,'COMMA') + '원'}">0원</span><br>
+        <strong th:text="${#numbers.formatInteger(item.goods_price * 0.9,0,'COMMA') + '원'}">0원</strong><br>(10% 할인)
+      </td>
+      <td class="buy_btns">
+        <ul>
+          <li><a th:href="@{|/cart/addGoodsInCart.do?goods_id=${item.goods_id}|}">장바구니</a></li>
+          <li><a th:href="@{|/order/orderEachGoods.do?goods_id=${item.goods_id}&order_goods_qty=1&goods_title=${item.goods_title}&goods_sales_price=${item.goods_sales_price}&goods_fileName=${item.goods_fileName}|}">구매하기</a></li>
+        </ul>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

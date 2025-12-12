@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body" th:with="map=${goodsMap}">
+  <section class="main_book">
+    <h3>베스트셀러</h3>
+    <div th:each="item : ${map.bestseller}" class="book">
+      <a th:href="@{|/goods/goodsDetail.do?goods_id=${item.goods_id}|}">
+        <img class="link" th:src="@{/resources/image/1px.gif}">
+      </a>
+      <img width="121" height="154"
+           th:src="@{|/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}|}">
+      <div class="title" th:text="${item.goods_title}">제목</div>
+      <div class="price" th:text="${#numbers.formatInteger(item.goods_price,0,'COMMA') + '원'}">0원</div>
+    </div>
+  </section>
+
+  <div class="clear"></div>
+  <section class="main_book">
+    <h3>새로 출판된 책</h3>
+    <div th:each="item : ${map.newbook}" class="book">
+      <a th:href="@{|/goods/goodsDetail.do?goods_id=${item.goods_id}|}">
+        <img class="link" th:src="@{/resources/image/1px.gif}">
+      </a>
+      <img width="121" height="154"
+           th:src="@{|/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}|}">
+      <div class="title" th:text="${item.goods_title}">제목</div>
+      <div class="price" th:text="${#numbers.formatInteger(item.goods_price,0,'COMMA') + '원'}">0원</div>
+    </div>
+  </section>
+
+  <div class="clear"></div>
+  <section class="main_book">
+    <h3>스테디셀러</h3>
+    <div th:each="item : ${map.steadyseller}" class="book">
+      <a th:href="@{|/goods/goodsDetail.do?goods_id=${item.goods_id}|}">
+        <img class="link" th:src="@{/resources/image/1px.gif}">
+      </a>
+      <img width="121" height="154"
+           th:src="@{|/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}|}">
+      <div class="title" th:text="${item.goods_title}">제목</div>
+      <div class="price" th:text="${#numbers.formatInteger(item.goods_price,0,'COMMA') + '원'}">0원</div>
+    </div>
+  </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body" th:if="${member_info != null}">
+  <h3 th:text="'회원 상세 - ' + ${member_info.member_id}">회원 상세</h3>
+  <table class="detail_table">
+    <tbody>
+    <tr><td>ID</td><td th:text="${member_info.member_id}">id</td></tr>
+    <tr><td>이름</td><td th:text="${member_info.member_name}">name</td></tr>
+    <tr><td>성별</td><td th:text="${member_info.member_gender}">gender</td></tr>
+    <tr><td>생년월일</td><td th:text="${member_info.member_birth}">birth</td></tr>
+    <tr><td>전화</td><td th:text="${member_info.tel1 + '-' + member_info.tel2 + '-' + member_info.tel3}">tel</td></tr>
+    <tr><td>휴대폰</td><td th:text="${member_info.hp1 + '-' + member_info.hp2 + '-' + member_info.hp3}">hp</td></tr>
+    <tr><td>이메일</td><td th:text="${member_info.email1 + '@' + member_info.email2}">email</td></tr>
+    <tr><td>주소</td><td th:text="${member_info.zipcode + ' ' + member_info.roadAddress + ' ' + member_info.jibunAddress + ' ' + member_info.namujiAddress}">addr</td></tr>
+    <tr><td>가입일</td><td th:text="${member_info.joinDate}">date</td></tr>
+    <tr><td>탈퇴여부</td><td th:text="${member_info.del_yn}">N</td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

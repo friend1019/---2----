@@ -29,6 +29,22 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 	private MemberService memberService;
 	@Autowired
 	private MemberVO memberVO;
+
+	@RequestMapping(value="/loginForm.do", method=RequestMethod.GET)
+	public ModelAndView loginForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "로그인 페이지");
+		mav.addObject("body", "member/loginForm :: body");
+		return mav;
+	}
+
+	@RequestMapping(value="/memberForm.do", method=RequestMethod.GET)
+	public ModelAndView memberForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "회원 가입 페이지");
+		mav.addObject("body", "member/memberForm :: body");
+		return mav;
+	}
 	
 	@Override
 	@RequestMapping(value="/login.do" ,method = RequestMethod.POST)
@@ -54,7 +70,9 @@ public class MemberControllerImpl extends BaseController implements MemberContro
 		}else{
 			String message="아이디나  비밀번호가 틀립니다. 다시 로그인해주세요";
 			mav.addObject("message", message);
-			mav.setViewName("/member/loginForm");
+			mav.setViewName("layout");
+			mav.addObject("title", "로그인 페이지");
+			mav.addObject("body", "member/loginForm :: body");
 		}
 		return mav;
 	}

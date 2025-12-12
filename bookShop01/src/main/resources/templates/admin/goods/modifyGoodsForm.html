@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body" th:with="goods=${goodsMap.goodsVO}, images=${goodsMap.imageList}">
+  <h3 th:text="'상품 수정 - ' + ${goods.goods_title}">상품 수정</h3>
+  <table class="detail_table">
+    <tbody>
+    <tr><td>ID</td><td th:text="${goods.goods_id}">0</td></tr>
+    <tr><td>제목</td>
+      <td>
+        <input type="text" id="title" th:value="${goods.goods_title}">
+        <button type="button" onclick="updateField('goods_title','title')">수정</button>
+      </td>
+    </tr>
+    <tr><td>저자</td><td th:text="${goods.goods_writer}">writer</td></tr>
+    <tr><td>출판사</td><td th:text="${goods.goods_publisher}">pub</td></tr>
+    <tr><td>가격</td>
+      <td>
+        <input type="number" id="price" th:value="${goods.goods_price}">
+        <button type="button" onclick="updateField('goods_price','price')">수정</button>
+      </td>
+    </tr>
+    <tr><td>판매가격</td>
+      <td>
+        <input type="number" id="salesPrice" th:value="${goods.goods_sales_price}">
+        <button type="button" onclick="updateField('goods_sales_price','salesPrice')">수정</button>
+      </td>
+    </tr>
+    <tr><td>상태</td>
+      <td>
+        <select id="status">
+          <option value="bestseller" th:selected="${goods.goods_status=='bestseller'}">베스트셀러</option>
+          <option value="steadyseller" th:selected="${goods.goods_status=='steadyseller'}">스테디셀러</option>
+          <option value="newbook" th:selected="${goods.goods_status=='newbook'}">신간</option>
+          <option value="on_sale" th:selected="${goods.goods_status=='on_sale'}">판매중</option>
+          <option value="buy_out" th:selected="${goods.goods_status=='buy_out'}">품절</option>
+          <option value="out_of_print" th:selected="${goods.goods_status=='out_of_print'}">절판</option>
+        </select>
+        <button type="button" onclick="updateField('goods_status','status')">수정</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h4>이미지</h4>
+  <div th:each="img : ${images}">
+    <img th:src="@{|/download.do?goods_id=${goods.goods_id}&fileName=${img.fileName}|}" style="max-width:150px;">
+    <span th:text="${img.fileName}">file</span>
+  </div>
+  <a th:href="@{|/admin/goods/addNewGoodsImageForm.do?goods_id=${goods.goods_id}|}">추가 이미지 등록</a>
+</div>
+
+<script th:inline="javascript">
+  const goodsIdVal = [[${goodsMap.goodsVO.goods_id}]];
+  function updateField(attribute, inputId) {
+    const el = document.getElementById(inputId);
+    if (!el) return;
+    const value = el.value;
+    fetch('/admin/goods/modifyGoodsInfo.do', {
+      method: 'POST',
+      headers: {'Content-Type':'application/x-www-form-urlencoded'},
+      body: 'goods_id=' + encodeURIComponent(goodsIdVal) + '&attribute=' + encodeURIComponent(attribute) + '&value=' + encodeURIComponent(value)
+    }).then(r => r.text()).then(res => {
+      if (res.trim() === 'mod_success') {
+        alert('수정되었습니다.');
+      } else {
+        alert('수정 실패');
+      }
+    }).catch(() => alert('수정 중 오류가 발생했습니다.'));
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body">
+  <h3>필수입력사항</h3>
+  <form th:action="@{/member/addMember.do}" method="post" id="memberForm">
+    <div id="detail_table">
+      <table>
+        <tbody>
+          <tr class="dot_line">
+            <td class="fixed_join">아이디</td>
+            <td>
+              <input type="text" name="_member_id" id="_member_id" size="20">
+              <input type="hidden" name="member_id" id="member_id">
+              <input type="button" id="btnOverlapped" value="중복체크" onclick="fn_overlapped()">
+            </td>
+          </tr>
+          <tr class="dot_line">
+            <td class="fixed_join">비밀번호</td>
+            <td><input name="member_pw" type="password" size="20"></td>
+          </tr>
+          <tr class="dot_line">
+            <td class="fixed_join">이름</td>
+            <td><input name="member_name" type="text" size="20"></td>
+          </tr>
+          <tr class="dot_line">
+            <td class="fixed_join">성별</td>
+            <td>
+              <input type="radio" name="member_gender" value="102">여성
+              <span style="padding-left:120px"></span>
+              <input type="radio" name="member_gender" value="101" checked>남성
+            </td>
+          </tr>
+          <tr class="dot_line">
+            <td class="fixed_join">법정생년월일</td>
+            <td>
+              <select name="member_birth_y">
+                <option th:each="year : ${#numbers.sequence(1921, 2020)}"
+                        th:value="${year}" th:text="${year}" th:selected="${year==2000}"></option>
+              </select>년
+              <select name="member_birth_m">
+                <option th:each="month : ${#numbers.sequence(1,12)}"
+                        th:value="${month}" th:text="${month}" th:selected="${month==5}"></option>
+              </select>월
+              <select name="member_birth_d">
+                <option th:each="day : ${#numbers.sequence(1,31)}"
+                        th:value="${day}" th:text="${day}" th:selected="${day==10}"></option>
+              </select>일
+              <span style="padding-left:50px"></span>
+              <input type="radio" name="member_birth_gn" value="2" checked>양력
+              <span style="padding-left:50px"></span>
+              <input type="radio" name="member_birth_gn" value="1">음력
+            </td>
+          </tr>
+          <tr class="dot_line">
+            <td class="fixed_join">전화번호</td>
+            <td>
+              <select name="tel1">
+                <option>없음</option>
+                <option value="02">02</option>
+                <option value="031">031</option>
+                <option value="032">032</option>
+                <option value="033">033</option>
+                <option value="041">041</option>
+                <option value="042">042</option>
+                <option value="043">043</option>
+                <option value="044">044</option>
+                <option value="051">051</option>
+                <option value="052">052</option>
+                <option value="053">053</option>
+                <option value="054">054</option>
+                <option value="055">055</option>
+                <option value="061">061</option>
+                <option value="062">062</option>
+                <option value="063">063</option>
+                <option value="064">064</option>
+                <option value="0502">0502</option>
+                <option value="0503">0503</option>
+                <option value="0505">0505</option>
+                <option value="0506">0506</option>
+                <option value="0507">0507</option>
+                <option value="0508">0508</option>
+                <option value="070">070</option>
+              </select>
+              - <input size="10px" type="text" name="tel2"> - <input size="10px" type="text" name="tel3">
+            </td>
+          </tr>
+          <tr class="dot_line">
+            <td class="fixed_join">휴대폰번호</td>
+            <td>
+              <select name="hp1">
+                <option value="010" selected>010</option>
+                <option value="011">011</option>
+                <option value="016">016</option>
+                <option value="017">017</option>
+                <option value="018">018</option>
+                <option value="019">019</option>
+              </select>
+              - <input size="10px" type="text" name="hp2">
+              - <input size="10px" type="text" name="hp3">
+              <input type="checkbox" name="smssts_yn" value="Y" checked> 쇼핑몰에서 발송하는 SMS 소식을 수신합니다.
+            </td>
+          </tr>
+          <tr class="dot_line">
+            <td class="fixed_join">이메일</td>
+            <td>
+              <input size="10px" type="text" name="email1">@<input size="10px" type="text" name="email2">
+              <input type="checkbox" name="emailsts_yn" value="Y" checked> 쇼핑몰에서 발송하는 e-mail을 수신합니다.
+            </td>
+          </tr>
+          <tr class="dot_line">
+            <td class="fixed_join">주소</td>
+            <td>
+              <input type="text" id="zipcode" name="zipcode" size="10"> <a href="javascript:execDaumPostcode()">우편번호검색</a><br>
+              도로명 주소: <input type="text" id="roadAddress" name="roadAddress" size="50"><br>
+              지번 주소: <input type="text" id="jibunAddress" name="jibunAddress" size="50"><br>
+              나머지 주소: <input type="text" name="namujiAddress" size="50">
+              <span id="guide" style="color:#999"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <input type="submit" value="회원가입">
+      <input type="reset" value="다시입력">
+    </div>
+  </form>
+
+  <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+  <script th:inline="javascript">
+    function execDaumPostcode() {
+      new daum.Postcode({
+        oncomplete: function(data) {
+          var fullRoadAddr = data.roadAddress;
+          var extraRoadAddr = '';
+          if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+            extraRoadAddr += data.bname;
+          }
+          if(data.buildingName !== '' && data.apartment === 'Y'){
+            extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+          }
+          if(extraRoadAddr !== ''){
+            extraRoadAddr = ' (' + extraRoadAddr + ')';
+          }
+          if(fullRoadAddr !== ''){
+            fullRoadAddr += extraRoadAddr;
+          }
+          document.getElementById('zipcode').value = data.zonecode;
+          document.getElementById('roadAddress').value = fullRoadAddr;
+          document.getElementById('jibunAddress').value = data.jibunAddress;
+          if(data.autoRoadAddress) {
+            var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+            document.getElementById('guide').innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+          } else if(data.autoJibunAddress) {
+            var expJibunAddr = data.autoJibunAddress;
+            document.getElementById('guide').innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+          } else {
+            document.getElementById('guide').innerHTML = '';
+          }
+        }
+      }).open();
+    }
+
+    function fn_overlapped(){
+      var _id=document.getElementById("_member_id").value;
+      if(_id===''){
+        alert("ID를 입력하세요");
+        return;
+      }
+      $.ajax({
+        type:"post",
+        async:false,
+        url:"/member/overlapped.do",
+        dataType:"text",
+        data: {id:_id},
+        success:function (data,textStatus){
+          if(data=='false'){
+            alert("사용할 수 있는 ID입니다.");
+            $('#btnOverlapped').prop("disabled", true);
+            $('#_member_id').prop("disabled", true);
+            $('#member_id').val(_id);
+          }else{
+            alert("사용할 수 없는 ID입니다.");
+          }
+        },
+        error:function(data,textStatus){
+          alert("에러가 발생했습니다.");
+        }
+      });
+    }
+  </script>
+</div>
+</body>
+</html>

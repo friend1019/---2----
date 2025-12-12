@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body"
+     th:with="orders=${orderMap.orderList}, delivery=${orderMap.deliveryInfo}, orderer=${orderMap.orderer}">
+  <h3>주문 상세</h3>
+  <table class="list_view">
+    <thead>
+    <tr style="background:#33ff00">
+      <th>주문번호</th>
+      <th>상품</th>
+      <th>수량</th>
+      <th>주문금액</th>
+      <th>배송비</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${orders}">
+      <td th:text="${item.order_id}">0</td>
+      <td>
+        <a th:href="@{|/goods/goodsDetail.do?goods_id=${item.goods_id}|}" th:text="${item.goods_title}">상품명</a>
+      </td>
+      <td th:text="${item.order_goods_qty}">1</td>
+      <td th:text="${#numbers.formatInteger(item.order_goods_qty * item.goods_sales_price,0,'COMMA') + '원'}">0원</td>
+      <td>0원</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <h4>배송지 정보</h4>
+  <table class="detail_table">
+    <tbody>
+    <tr><td class="fixed_join">배송방법</td><td th:text="${delivery.delivery_method}">방법</td></tr>
+    <tr><td class="fixed_join">받으실 분</td><td th:text="${delivery.receiver_name}">이름</td></tr>
+    <tr><td class="fixed_join">휴대폰번호</td>
+      <td th:text="${delivery.receiver_hp1 + '-' + delivery.receiver_hp2 + '-' + delivery.receiver_hp3}">휴대폰</td></tr>
+    <tr><td class="fixed_join">유선전화</td>
+      <td th:text="${delivery.receiver_tel1 + '-' + delivery.receiver_tel2 + '-' + delivery.receiver_tel3}">전화</td></tr>
+    <tr><td class="fixed_join">주소</td><td th:text="${delivery.delivery_address}">주소</td></tr>
+    <tr><td class="fixed_join">배송 메시지</td><td th:text="${delivery.delivery_message}">메시지</td></tr>
+    <tr><td class="fixed_join">선물 포장</td><td th:text="${delivery.gift_wrapping}">N</td></tr>
+    </tbody>
+  </table>
+
+  <h4>주문 고객</h4>
+  <table class="detail_table">
+    <tbody>
+    <tr><td>이름</td><td th:text="${orderer.member_name}">이름</td></tr>
+    <tr><td>핸드폰</td><td th:text="${orderer.hp1 + '-' + orderer.hp2 + '-' + orderer.hp3}">hp</td></tr>
+    <tr><td>이메일</td><td th:text="${orderer.email1 + '@' + orderer.email2}">email</td></tr>
+    </tbody>
+  </table>
+
+  <h4>결제정보</h4>
+  <table class="detail_table">
+    <tbody>
+    <tr><td class="fixed_join">결제방법</td><td th:text="${delivery.pay_method}">method</td></tr>
+    <tr><td class="fixed_join">결제카드</td><td th:text="${delivery.card_com_name}">card</td></tr>
+    <tr><td class="fixed_join">할부기간</td><td th:text="${delivery.card_pay_month}">month</td></tr>
+    </tbody>
+  </table>
+
+  <h4>배송상태</h4>
+  <form>
+    <select name="s_delivery_state" id="s_delivery_state">
+      <option value="delivery_prepared" th:selected="${delivery.delivery_state=='delivery_prepared'}">배송준비중</option>
+      <option value="delivering" th:selected="${delivery.delivery_state=='delivering'}">배송중</option>
+      <option value="finished_delivering" th:selected="${delivery.delivery_state=='finished_delivering'}">배송완료</option>
+      <option value="cancel_order" th:selected="${delivery.delivery_state=='cancel_order'}">주문취소</option>
+      <option value="returning_goods" th:selected="${delivery.delivery_state=='returning_goods'}">반품</option>
+    </select>
+    <button type="button" th:onclick="'updateDeliveryState('+${delivery.order_id}+');return false;'">배송수정</button>
+  </form>
+</div>
+
+<script>
+  function updateDeliveryState(orderId) {
+    const select = document.getElementById('s_delivery_state');
+    const value = select ? select.value : '';
+    fetch('/admin/order/modifyDeliveryState.do', {
+      method: 'POST',
+      headers: {'Content-Type':'application/x-www-form-urlencoded'},
+      body: 'order_id=' + encodeURIComponent(orderId) + '&delivery_state=' + encodeURIComponent(value)
+    }).then(r => r.text()).then(res => {
+      if (res.trim() === 'mod_success') {
+        alert('배송 상태를 수정했습니다.');
+        location.reload();
+      } else {
+        alert('수정 실패, 다시 시도해 주세요.');
+      }
+    }).catch(() => alert('수정 중 오류가 발생했습니다.'));
+  }
+</script>
+</body>
+</html>

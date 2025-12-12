@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body" th:with="orders=${myOrderHistList}">
+  <h3>주문 배송 조회</h3>
+  <div style="margin-bottom:10px;">
+    <a th:href="@{|/mypage/listMyOrderHistory.do?fixedSearchPeriod=today|}">오늘</a> |
+    <a th:href="@{|/mypage/listMyOrderHistory.do?fixedSearchPeriod=one_week|}">1주</a> |
+    <a th:href="@{|/mypage/listMyOrderHistory.do?fixedSearchPeriod=two_week|}">2주</a> |
+    <a th:href="@{|/mypage/listMyOrderHistory.do?fixedSearchPeriod=one_month|}">1달</a> |
+    <a th:href="@{|/mypage/listMyOrderHistory.do?fixedSearchPeriod=three_month|}">3달</a> |
+    <a th:href="@{|/mypage/listMyOrderHistory.do?fixedSearchPeriod=four_month|}">4달</a>
+  </div>
+  <div>
+    조회기간:
+    <span th:text="${beginYear}">2020</span>-
+    <span th:text="${beginMonth}">01</span>-
+    <span th:text="${beginDay}">01</span>
+    ~
+    <span th:text="${endYear}">2020</span>-
+    <span th:text="${endMonth}">01</span>-
+    <span th:text="${endDay}">01</span>
+  </div>
+
+  <table class="list_view" style="margin-top:15px;">
+    <tbody align="center">
+      <tr style="background:#33ff00">
+        <td class="fixed">주문번호</td>
+        <td class="fixed">주문일자</td>
+        <td>주문내역</td>
+        <td>주문금액/수량</td>
+        <td>주문상태</td>
+        <td>주문자</td>
+        <td>수령자</td>
+        <td>주문취소</td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(orders)}">
+        <td colspan="8" class="fixed"><strong>주문한 상품이 없습니다.</strong></td>
+      </tr>
+      <tr th:each="item : ${orders}">
+        <td><a th:href="@{|/mypage/myOrderDetail.do?order_id=${item.order_id}|}" th:text="${item.order_id}">0</a></td>
+        <td th:text="${item.pay_order_time}">날짜</td>
+        <td th:text="${item.goods_title}">내역</td>
+        <td th:text="${#numbers.formatInteger(item.goods_sales_price*item.order_goods_qty,0,'COMMA')} + '원/' + ${item.order_goods_qty}">0</td>
+        <td th:text="${item.delivery_state}">상태</td>
+        <td th:text="${item.orderer_name}">주문자</td>
+        <td th:text="${item.receiver_name}">수령자</td>
+        <td>
+          <form th:action="@{/mypage/cancelMyOrder.do}" method="post">
+            <input type="hidden" name="order_id" th:value="${item.order_id}">
+            <button type="submit" th:disabled="${item.delivery_state != 'delivery_prepared'}">취소</button>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

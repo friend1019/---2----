@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body" th:with="list=${newOrderList}">
+  <h3>주문 조회</h3>
+  <p>조회 기간: <span th:text="${beginYear}"></span>-<span th:text="${beginMonth}"></span>-<span th:text="${beginDay}"></span>
+    ~ <span th:text="${endYear}"></span>-<span th:text="${endMonth}"></span>-<span th:text="${endDay}"></span></p>
+
+  <table class="list_view">
+    <thead>
+    <tr style="background:#33ff00">
+      <th>주문번호</th>
+      <th>회원</th>
+      <th>상품명</th>
+      <th>수량</th>
+      <th>결제금액</th>
+      <th>상태</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(list)}">
+      <td colspan="6">주문이 없습니다.</td>
+    </tr>
+    <tr th:each="o : ${list}">
+      <td><a th:href="@{|/admin/order/orderDetail.do?order_id=${o.order_id}|}" th:text="${o.order_id}">1</a></td>
+      <td th:text="${o.member_id}">member</td>
+      <td th:text="${o.goods_title}">title</td>
+      <td th:text="${o.order_goods_qty}">1</td>
+      <td th:text="${#numbers.formatInteger(o.order_goods_qty * o.goods_sales_price,0,'COMMA') + '원'}">0원</td>
+      <td th:text="${o.delivery_state}">state</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

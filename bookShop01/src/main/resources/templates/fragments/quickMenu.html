@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div id="sticky" class="jqstickyside">
+  <ul>
+    <li><a th:href="@{/cart/myCartList.do}"><img width="67" height="45" th:src="@{/resources/image/quick_cart.gif}" alt="cart"></a></li>
+    <li><a th:href="@{/mypage/listMyOrderHistory.do}"><img width="67" height="45" th:src="@{/resources/image/quick_order.gif}" alt="order"></a></li>
+    <li><a href="#"><img width="67" height="45" th:src="@{/resources/image/quick_today.gif}" alt="today"></a></li>
+    <li><a href="#"><img width="67" height="45" th:src="@{/resources/image/quick_saving.gif}" alt="saving"></a></li>
+  </ul>
+</div>
+</body>
+</html>

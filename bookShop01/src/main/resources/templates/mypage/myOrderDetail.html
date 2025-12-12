@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body" th:with="orders=${myOrderList}, orderer=${orderer}">
+  <h1>1. 주문 상세정보</h1>
+  <table class="list_view">
+    <tbody align="center">
+      <tr style="background:#33ff00">
+        <td>주문번호</td>
+        <td>주문일자</td>
+        <td colspan="2" class="fixed">주문상품명</td>
+        <td>수량</td>
+        <td>주문금액</td>
+        <td>배송비</td>
+        <td>예상적립금</td>
+        <td>주문금액합계</td>
+      </tr>
+      <tr th:each="item : ${orders}">
+        <td th:text="${item.order_id}">0</td>
+        <td th:text="${item.pay_order_time}">날짜</td>
+        <td class="goods_image">
+          <img width="75" th:src="@{|/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}|}">
+        </td>
+        <td><h2 th:text="${item.goods_title}">상품명</h2></td>
+        <td th:text="${item.order_goods_qty}">1</td>
+        <td th:text="${#numbers.formatInteger(item.order_goods_qty * item.goods_sales_price,0,'COMMA') + '원'}">0원</td>
+        <td><h2>0원</h2></td>
+        <td th:text="${1500 * item.order_goods_qty + '원'}">0원</td>
+        <td th:text="${#numbers.formatInteger(item.order_goods_qty * item.goods_sales_price,0,'COMMA') + '원'}">0원</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="clear"></div>
+  <h1 style="margin-top:20px;">2.배송지 정보</h1>
+  <div class="detail_table">
+    <table>
+      <tbody>
+        <tr class="dot_line">
+          <td class="fixed_join">배송방법</td>
+          <td th:text="${orders[0].delivery_method}">배송방법</td>
+        </tr>
+        <tr class="dot_line">
+          <td class="fixed_join">받으실 분</td>
+          <td th:text="${orders[0].receiver_name}">수령인</td>
+        </tr>
+        <tr class="dot_line">
+          <td class="fixed_join">휴대폰번호</td>
+          <td th:text="${orders[0].receiver_hp1 + '-' + orders[0].receiver_hp2 + '-' + orders[0].receiver_hp3}">휴대폰</td>
+        </tr>
+        <tr class="dot_line">
+          <td class="fixed_join">유선전화</td>
+          <td th:text="${orders[0].receiver_tel1 + '-' + orders[0].receiver_tel2 + '-' + orders[0].receiver_tel3}">유선전화</td>
+        </tr>
+        <tr class="dot_line">
+          <td class="fixed_join">주소</td>
+          <td th:text="${orders[0].delivery_address}">주소</td>
+        </tr>
+        <tr class="dot_line">
+          <td class="fixed_join">배송 메시지</td>
+          <td th:text="${orders[0].delivery_message}">메시지</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 style="margin-top:20px;">주문고객</h2>
+  <table>
+    <tbody>
+      <tr class="dot_line">
+        <td>이름</td>
+        <td><input type="text" th:value="${orderer.member_name}" size="15" disabled></td>
+      </tr>
+      <tr class="dot_line">
+        <td>핸드폰</td>
+        <td><input type="text" th:value="${orderer.hp1 + '-' + orderer.hp2 + '-' + orderer.hp3}" size="15" disabled></td>
+      </tr>
+      <tr class="dot_line">
+        <td>이메일</td>
+        <td><input type="text" th:value="${orderer.email1 + '@' + orderer.email2}" size="15" disabled></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h1 style="margin-top:20px;">3.결제정보</h1>
+  <div class="detail_table">
+    <table>
+      <tbody>
+        <tr class="dot_line">
+          <td class="fixed_join">결제방법</td>
+          <td th:text="${orders[0].pay_method}">결제방법</td>
+        </tr>
+        <tr class="dot_line">
+          <td class="fixed_join">결제카드</td>
+          <td th:text="${orders[0].card_com_name}">카드사</td>
+        </tr>
+        <tr class="dot_line">
+          <td class="fixed_join">할부기간</td>
+          <td th:text="${orders[0].card_pay_month}">할부</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="clear"></div>
+  <div style="margin-top:20px;">
+    <a th:href="@{/main/main.do}"><img width="75" th:src="@{/resources/image/btn_shoping_continue.jpg}"></a>
+  </div>
+</div>
+</body>
+</html>

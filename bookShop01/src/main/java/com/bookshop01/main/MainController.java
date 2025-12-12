@@ -26,14 +26,12 @@ public class MainController extends BaseController {
 
 	@RequestMapping(value= "/main/main.do" ,method={RequestMethod.POST,RequestMethod.GET})
 	public ModelAndView main(HttpServletRequest request, HttpServletResponse response) throws Exception{
-		HttpSession session;
-		ModelAndView mav=new ModelAndView();
-		String viewName=(String)request.getAttribute("viewName");
-		mav.setViewName(viewName);
-		
-		session=request.getSession();
+		HttpSession session=request.getSession();
 		session.setAttribute("side_menu", "user");
 		Map<String,List<GoodsVO>> goodsMap=goodsService.listGoods();
+		ModelAndView mav=new ModelAndView("layout");
+		mav.addObject("title", "쇼핑몰 메인페이지");
+		mav.addObject("body", "main/main :: body");
 		mav.addObject("goodsMap", goodsMap);
 		return mav;
 	}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body">
+  <table class="list_view">
+    <tbody align="center">
+      <tr style="background:#33ff00">
+        <td class="fixed">구분</td>
+        <td colspan="2" class="fixed">상품명</td>
+        <td>정가</td>
+        <td>판매가(10%할인)</td>
+        <td>수량</td>
+        <td>합계</td>
+        <td>주문</td>
+      </tr>
+
+      <tr th:if="${#lists.isEmpty(cartMap.myGoodsList)}">
+        <td colspan="8" class="fixed"><strong>장바구니에 상품이 없습니다.</strong></td>
+      </tr>
+
+      <tr th:each="item, stat : ${cartMap.myGoodsList}">
+        <td><input type="checkbox" checked disabled></td>
+        <td class="goods_image">
+          <a th:href="@{|/goods/goodsDetail.do?goods_id=${item.goods_id}|}">
+            <img width="75" th:src="@{|/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}|}">
+          </a>
+        </td>
+        <td>
+          <h2><a th:href="@{|/goods/goodsDetail.do?goods_id=${item.goods_id}|}" th:text="${item.goods_title}">상품명</a></h2>
+        </td>
+        <td class="price"><span th:text="${item.goods_price + '원'}">0원</span></td>
+        <td>
+          <strong th:text="${#numbers.formatInteger(item.goods_sales_price*0.9,0,'COMMA') + '원'}">0원</strong>
+        </td>
+        <td>
+          <span th:text="${cartMap.myCartList[stat.index].cart_goods_qty}">1</span>
+        </td>
+        <td>
+          <strong th:text="${#numbers.formatInteger(item.goods_sales_price*0.9 * cartMap.myCartList[stat.index].cart_goods_qty,0,'COMMA') + '원'}">0원</strong>
+        </td>
+        <td>
+          <form th:action="@{/order/orderEachGoods.do}" method="post">
+            <input type="hidden" name="goods_id" th:value="${item.goods_id}">
+            <input type="hidden" name="goods_title" th:value="${item.goods_title}">
+            <input type="hidden" name="goods_sales_price" th:value="${item.goods_sales_price}">
+            <input type="hidden" name="goods_fileName" th:value="${item.goods_fileName}">
+            <input type="hidden" name="order_goods_qty" th:value="${cartMap.myCartList[stat.index].cart_goods_qty}">
+            <button type="submit">
+              <img width="75" alt="" th:src="@{/resources/image/btn_order.jpg}">
+            </button>
+          </form>
+          <form th:action="@{/cart/removeCartGoods.do}" method="post" style="margin-top:6px;">
+            <input type="hidden" name="cart_id" th:value="${cartMap.myCartList[stat.index].cart_id}">
+            <button type="submit">
+              <img width="75" alt="" th:src="@{/resources/image/btn_delete.jpg}">
+            </button>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="clear"></div>
+  <br><br>
+
+  <table width="80%" class="list_view" style="background:#cacaff">
+    <tbody>
+    <tr align="center" class="fixed">
+      <td class="fixed">총 상품수</td>
+      <td>총 상품금액</td>
+      <td></td>
+      <td>총 배송비</td>
+      <td></td>
+      <td>총 할인 금액</td>
+      <td></td>
+      <td>최종 결제금액</td>
+    </tr>
+    <tr align="center">
+      <td><p th:text="${totalGoodsNum + '개'}">0개</p></td>
+      <td><p th:text="${#numbers.formatInteger(totalGoodsPrice,0,'COMMA') + '원'}">0원</p></td>
+      <td><img width="25" alt="" th:src="@{/resources/image/plus.jpg}"></td>
+      <td><p th:text="${totalDeliveryPrice + '원'}">0원</p></td>
+      <td><img width="25" alt="" th:src="@{/resources/image/minus.jpg}"></td>
+      <td><p th:text="${totalDiscountedPrice + '원'}">0원</p></td>
+      <td><img width="25" alt="" th:src="@{/resources/image/equal.jpg}"></td>
+      <td>
+        <p th:text="${#numbers.formatInteger(totalGoodsPrice + totalDeliveryPrice - totalDiscountedPrice,0,'COMMA') + '원'}">0원</p>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <center style="margin-top:20px;">
+    <form th:if="${not #lists.isEmpty(cartMap.myGoodsList)}" th:action="@{/order/orderAllCartGoods.do}" method="post">
+      <div th:each="item, stat : ${cartMap.myGoodsList}" style="display:none;">
+        <input type="hidden" name="cart_goods_qty" th:value="${item.goods_id + ':' + cartMap.myCartList[stat.index].cart_goods_qty}">
+      </div>
+      <button type="submit">
+        <img width="75" alt="" th:src="@{/resources/image/btn_order_final.jpg}">
+      </button>
+    </form>
+  </center>
+</div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body">
+  <div id="ad_main_banner">
+    <ul class="bjqs">
+      <li><img width="775" height="145" th:src="@{/resources/image/main_banner01.jpg}"></li>
+      <li><img width="775" height="145" th:src="@{/resources/image/main_banner02.jpg}"></li>
+      <li><img width="775" height="145" th:src="@{/resources/image/main_banner03.jpg}"></li>
+    </ul>
+  </div>
+
+  <div class="main_book">
+    <h3>베스트셀러</h3>
+    <div th:each="item, stat : ${goodsMap.bestseller}">
+      <div class="book">
+        <a th:href="@{|/goods/goodsDetail.do?goods_id=${item.goods_id}|}">
+          <img class="link" th:src="@{/resources/image/1px.gif}" alt="">
+        </a>
+        <img width="121" height="154"
+             th:src="@{|/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}|}">
+        <div class="title" th:text="${item.goods_title}">제목</div>
+        <div class="price" th:text="${#numbers.formatInteger(item.goods_price,0,'COMMA') + '원'}">0원</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="clear"></div>
+  <div id="ad_sub_banner">
+    <img width="770" height="117" th:src="@{/resources/image/sub_banner01.jpg}">
+  </div>
+
+  <div class="main_book">
+    <h3>새로 출판된 책</h3>
+    <div th:each="item, stat : ${goodsMap.newbook}">
+      <div class="book">
+        <a th:href="@{|/goods/goodsDetail.do?goods_id=${item.goods_id}|}">
+          <img class="link" th:src="@{/resources/image/1px.gif}" alt="">
+        </a>
+        <img width="121" height="154"
+             th:src="@{|/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}|}">
+        <div class="title" th:text="${item.goods_title}">제목</div>
+        <div class="price" th:text="${#numbers.formatInteger(item.goods_price,0,'COMMA') + '원'}">0원</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="clear"></div>
+  <div id="ad_sub_banner">
+    <img width="770" height="117" th:src="@{/resources/image/sub_banner02.jpg}">
+  </div>
+
+  <div class="main_book">
+    <h3>스테디셀러</h3>
+    <div th:each="item, stat : ${goodsMap.steadyseller}">
+      <div class="book">
+        <a th:href="@{|/goods/goodsDetail.do?goods_id=${item.goods_id}|}">
+          <img class="link" th:src="@{/resources/image/1px.gif}" alt="">
+        </a>
+        <img width="121" height="154"
+             th:src="@{|/thumbnails.do?goods_id=${item.goods_id}&fileName=${item.goods_fileName}|}">
+        <div class="title" th:text="${item.goods_title}">제목</div>
+        <div class="price" th:text="${#numbers.formatInteger(item.goods_price,0,'COMMA') + '원'}">0원</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body" th:with="orders=${myOrderList}, member=${memberInfo}">
+  <h1>최근주문내역
+    <a th:href="@{/mypage/listMyOrderHistory.do}"><img th:src="@{/resources/image/btn_more_see.jpg}"></a>
+  </h1>
+  <table class="list_view">
+    <tbody align="center">
+      <tr style="background:#33ff00">
+        <td>주문번호</td>
+        <td>주문일자</td>
+        <td>주문상품</td>
+        <td>주문상태</td>
+        <td>주문취소</td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(orders)}">
+        <td colspan="5" class="fixed"><strong>주문한 상품이 없습니다.</strong></td>
+      </tr>
+      <tr th:each="item : ${orders}">
+        <td><a th:href="@{|/mypage/myOrderDetail.do?order_id=${item.order_id}|}" th:text="${item.order_id}">0</a></td>
+        <td th:text="${item.pay_order_time}">날짜</td>
+        <td th:text="${item.goods_title}">상품</td>
+        <td th:text="${item.delivery_state}">상태</td>
+        <td>
+          <form th:action="@{/mypage/cancelMyOrder.do}" method="post">
+            <input type="hidden" name="order_id" th:value="${item.order_id}">
+            <button type="submit" th:disabled="${item.delivery_state != 'delivery_prepared'}">주문취소</button>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <br><br><br>
+  <h1>나의 정보</h1>
+  <table border="0" width="100%" cellpadding="10" cellspacing="10">
+    <tr>
+      <td>이메일</td>
+      <td><strong th:text="${member != null ? member.email1 + '@' + member.email2 : ''}">email</strong></td>
+    </tr>
+    <tr>
+      <td>전화번호</td>
+      <td><strong th:text="${member != null ? member.hp1 + '-' + member.hp2 + '-' + member.hp3 : ''}">phone</strong></td>
+    </tr>
+    <tr>
+      <td>주소</td>
+      <td>
+        도로명: <strong th:text="${member != null ? member.roadAddress : ''}">road</strong><br>
+        지번: <strong th:text="${member != null ? member.jibunAddress : ''}">jibun</strong>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>에러</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 40px; background: #f7f7f7; }
+    .box { max-width: 640px; margin: 0 auto; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 24px; }
+    h2 { margin-top: 0; }
+    .meta { color: #666; font-size: 14px; }
+    .meta div { margin: 4px 0; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>문제가 발생했습니다.</h2>
+    <div class="meta">
+      <div th:text="'Status: ' + ${status}"></div>
+      <div th:text="'Error: ' + ${error}"></div>
+      <div th:text="'Message: ' + ${message}"></div>
+      <div th:text="'Path: ' + ${path}"></div>
+      <div th:text="'Timestamp: ' + ${timestamp}"></div>
+    </div>
+    <p>계속 문제가 발생하면 로그를 확인해 주세요.</p>
+  </div>
+</body>
+</html>

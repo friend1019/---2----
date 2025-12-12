@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body" th:with="member=${memberInfo}">
+  <h3>내 정보</h3>
+  <table border="0" width="100%" cellpadding="10" cellspacing="10">
+    <tr>
+      <td>아이디</td>
+      <td th:text="${member.member_id}">id</td>
+    </tr>
+    <tr>
+      <td>이름</td>
+      <td th:text="${member.member_name}">name</td>
+    </tr>
+    <tr>
+      <td>성별</td>
+      <td th:text="${member.member_gender}">gender</td>
+    </tr>
+    <tr>
+      <td>이메일</td>
+      <td th:text="${member.email1 + '@' + member.email2}">email</td>
+    </tr>
+    <tr>
+      <td>전화번호</td>
+      <td th:text="${member.tel1 + '-' + member.tel2 + '-' + member.tel3}">tel</td>
+    </tr>
+    <tr>
+      <td>휴대폰</td>
+      <td th:text="${member.hp1 + '-' + member.hp2 + '-' + member.hp3}">hp</td>
+    </tr>
+    <tr>
+      <td>주소</td>
+      <td>
+        <div th:text="${member.zipcode}">zipcode</div>
+        <div th:text="${member.roadAddress}">road</div>
+        <div th:text="${member.jibunAddress}">jibun</div>
+        <div th:text="${member.namujiAddress}">rest</div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>

@@ -45,8 +45,11 @@ public class AdminOrderControllerImpl extends BaseController  implements AdminOr
 	@RequestMapping(value="/adminOrderMain.do" ,method={RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView adminOrderMain(@RequestParam Map<String, String> dateMap,
 			                          HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav = new ModelAndView(viewName);
+		HttpSession session=request.getSession();
+		session.setAttribute("side_menu", "admin_mode");
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "관리자 주문 조회");
+		mav.addObject("body", "admin/order/adminOrderMain :: body");
 
 		String fixedSearchPeriod = dateMap.get("fixedSearchPeriod");
 		String section = dateMap.get("section");
@@ -108,8 +111,9 @@ public class AdminOrderControllerImpl extends BaseController  implements AdminOr
 	@RequestMapping(value="/orderDetail.do" ,method={RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView orderDetail(@RequestParam("order_id") int order_id, 
 			                      HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav = new ModelAndView(viewName);
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "주문 상세");
+		mav.addObject("body", "admin/order/adminOrderDetail :: body");
 		Map orderMap =adminOrderService.orderDetail(order_id);
 		mav.addObject("orderMap", orderMap);
 		return mav;

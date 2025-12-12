@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="body" th:with="list=${newGoodsList}">
+  <h3>상품 조회</h3>
+  <div style="margin-bottom:10px;">
+    조회 기간: <span th:text="${beginYear}"></span>-<span th:text="${beginMonth}"></span>-<span th:text="${beginDay}"></span>
+    ~ <span th:text="${endYear}"></span>-<span th:text="${endMonth}"></span>-<span th:text="${endDay}"></span>
+    <br>
+    <a th:href="@{|/admin/goods/adminGoodsMain.do?fixedSearchPeriod=today|}">오늘</a> |
+    <a th:href="@{|/admin/goods/adminGoodsMain.do?fixedSearchPeriod=one_week|}">1주</a> |
+    <a th:href="@{|/admin/goods/adminGoodsMain.do?fixedSearchPeriod=two_week|}">2주</a> |
+    <a th:href="@{|/admin/goods/adminGoodsMain.do?fixedSearchPeriod=one_month|}">1달</a> |
+    <a th:href="@{|/admin/goods/adminGoodsMain.do?fixedSearchPeriod=two_month|}">2달</a> |
+    <a th:href="@{|/admin/goods/adminGoodsMain.do?fixedSearchPeriod=three_month|}">3달</a> |
+    <a th:href="@{|/admin/goods/adminGoodsMain.do?fixedSearchPeriod=four_month|}">4달</a>
+  </div>
+
+  <table class="list_view">
+    <tbody align="center">
+    <tr style="background:#33ff00">
+      <td>상품번호</td>
+      <td>상품이름</td>
+      <td>저자</td>
+      <td>출판사</td>
+      <td>상품가격</td>
+      <td>입력일</td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(list)}">
+      <td colspan="6" class="fixed"><strong>조회된 상품이 없습니다.</strong></td>
+    </tr>
+    <tr th:each="item : ${list}">
+      <td th:text="${item.goods_id}">0</td>
+      <td>
+        <a th:href="@{|/admin/goods/modifyGoodsForm.do?goods_id=${item.goods_id}|}" th:text="${item.goods_title}">제목</a>
+      </td>
+      <td th:text="${item.goods_writer}">저자</td>
+      <td th:text="${item.goods_publisher}">출판사</td>
+      <td th:text="${#numbers.formatInteger(item.goods_price,0,'COMMA') + '원'}">0원</td>
+      <td th:text="${item.goods_credate}">날짜</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:20px;">
+    <a class="btn" th:href="@{/admin/goods/addNewGoodsForm.do}">상품 등록하기</a>
+  </div>
+</div>
+</body>
+</html>

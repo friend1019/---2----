@@ -36,15 +36,36 @@ public class CartControllerImpl extends BaseController implements CartController
 	
 	@RequestMapping(value="/myCartList.do" ,method = RequestMethod.GET)
 	public ModelAndView myCartMain(HttpServletRequest request, HttpServletResponse response)  throws Exception {
-		String viewName=(String)request.getAttribute("viewName");
-		ModelAndView mav = new ModelAndView(viewName);
+		ModelAndView mav = new ModelAndView("layout");
+		mav.addObject("title", "장바구니");
+		mav.addObject("body", "cart/myCartList :: body");
 		HttpSession session=request.getSession();
 		MemberVO memberVO=(MemberVO)session.getAttribute("memberInfo");
 		String member_id=memberVO.getMember_id();
 		cartVO.setMember_id(member_id);
 		Map<String ,List> cartMap=cartService.myCartList(cartVO);
 		session.setAttribute("cartMap", cartMap);//장바구니 목록 화면에서 상품 주문 시 사용하기 위해서 장바구니 목록을 세션에 저장한다.
-		//mav.addObject("cartMap", cartMap);
+		List<GoodsVO> goodsList = cartMap.get("myGoodsList");
+		List<CartVO> cartList = cartMap.get("myCartList");
+		int totalGoodsNum = 0;
+		int totalGoodsPrice = 0;
+		int totalDeliveryPrice = 0;
+		int totalDiscountedPrice = 0;
+		if(goodsList != null && cartList != null) {
+			for(int i=0; i<goodsList.size(); i++) {
+				GoodsVO g = goodsList.get(i);
+				CartVO c = cartList.get(i);
+				int qty = c.getCart_goods_qty();
+				int price = (int)(g.getGoods_sales_price() * 0.9);
+				totalGoodsNum += qty;
+				totalGoodsPrice += price * qty;
+			}
+		}
+		mav.addObject("cartMap", cartMap);
+		mav.addObject("totalGoodsNum", totalGoodsNum);
+		mav.addObject("totalGoodsPrice", totalGoodsPrice);
+		mav.addObject("totalDeliveryPrice", totalDeliveryPrice);
+		mav.addObject("totalDiscountedPrice", totalDiscountedPrice);
 		return mav;
 	}
 	@RequestMapping(value="/addGoodsInCart.do" ,method = RequestMethod.POST,produces = "application/text; charset=utf8")
